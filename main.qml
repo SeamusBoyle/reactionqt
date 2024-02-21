@@ -7,50 +7,45 @@ import com.mycompany.qmlcomponents 1.0
 Window {
     id: root
 
+    property bool allowCounting: true
     property int counter: 0
+
     width: 640
     height: 480
     visible: true
     title: qsTr("Hello World")
 
     property Reaction actionCounterIncrease: Reaction {
+        canExecute: root.allowCounting
         onexecute: function () {
-            counter += 1
+            root.counter += 1
         }
     }
 
     property Reaction actionCounterReset: Reaction {
         onexecute: function () {
-            counter = 0
+            root.counter = 0
         }
     }
 
-    Label {
-        anchors.centerIn: parent
-        text: `Current count: ${root.counter}`
-        horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 24
-    }
+    Counter {
+        anchors.fill: parent
 
-    Row {
-        spacing: 10
-        Button {
-            text: "Click me"
-            action: ReactionAdapter {
-                target: actionCounterIncrease
-            }
+        count: root.counter
+        counterEnabled: root.allowCounting
+
+        actionCountUp: ReactionAdapter {
+            target: root.actionCounterIncrease
+        }
+        actionReset: ReactionAdapter {
+            target: root.actionCounterReset
         }
 
-        Button {
-            text: actionCounterIncrease.canExecute ? "Disable counter" : "Enable counter"
-            onClicked: actionCounterIncrease.canExecute = !actionCounterIncrease.canExecute
-        }
+        onCounterEnabledChanged: root.allowCounting = counterEnabled
 
-        Button {
-            text: "Reset"
-            action: ReactionAdapter {
-                target: actionCounterReset
-            }
+        Binding {
+            property: 'counterEnabled'
+            value: root.allowCounting
         }
     }
 }

@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
+        <file>Counter.ui.qml</file>
         <file>ReactionAdapter.qml</file>
+        <file>main.qml</file>
     </qresource>
 </RCC>
